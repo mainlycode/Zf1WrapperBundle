@@ -28,6 +28,12 @@ class DefaultController extends Controller
         include $rootDir . '/' . $bootstrap;
         $content = ob_get_clean();
 
+        // exit on Location header
+        $matches = array_filter(headers_list(), function ($v) { return 'Location:' == substr($v, 0, 9); });
+        if (count($matches) >0) {
+            exit;
+        }
+
         return new Response($content);
     }
 }
